@@ -1,24 +1,23 @@
 //variaveis da boilinha
 let xBolinha = 250;
 let yBolinha = 175;
-let diametroBolinha = 25;
+let diametroBolinha = 30;
 let raio = diametroBolinha / 2;
 
 //variaveis velocidade da bolinha
-let velocxBolinha = 6;
-let velocyBolinha = 6;
+let velocxBolinha = 3
+let velocyBolinha = 3
 
 //variaveis da raquete jogador
 let xRaqueteJog = 10
 let yRaqueteJog = 130
-let raqueteComprimentoJog = 10
-let raqueteAlturaJog = 90
+let raqueteComprimento = 10
+let raqueteAltura = 90
 
 //variaves raquete oponente
 let xRaquetePc = 480
 let yRaquetePc = 130
-let raqueteComprimentoPc = 10
-let raqueteAlturaPc = 90
+let velocYpc;
 
 let colidiu = false;
 
@@ -31,19 +30,16 @@ function draw() {
     mostraBolinha();
     movBolinha();
     verificaColisaoBorda();
-    mostraRaqueteJog();
-    mostraRaquetePc();
+    mostraRaquete(xRaqueteJog,yRaqueteJog);
+    mostraRaquete(xRaquetePc, yRaquetePc);
     movimentaRaqueteJog();
-    verificaColisaoRaqueteJog();
-    verificaColisaoRaquetePc ();
-  }
-
-function mostraRaqueteJog (){
-  rect (xRaqueteJog, yRaqueteJog, raqueteComprimentoJog, raqueteAlturaJog);
+    movimentaRaquetePC();
+    verificaColisaoRaqueteLib(xRaqueteJog,yRaqueteJog);
+    verificaColisaoRaqueteLib(xRaquetePc,yRaquetePc);
 }
 
-function mostraRaquetePc (){
-  rect (xRaquetePc, yRaquetePc, raqueteComprimentoPc, raqueteAlturaPc);
+function mostraRaquete (x,y){
+  rect (x, y, raqueteComprimento, raqueteAltura);
 }
 
 function mostraBolinha (){
@@ -80,14 +76,14 @@ function movimentaRaqueteJog () {
   }
 }
 
-function verificaColisaoRaqueteJog () {
-  if (xBolinha - raio < xRaqueteJog + raqueteComprimentoJog && yBolinha - raio < yRaqueteJog + raqueteAlturaJog && yBolinha + raio > yRaqueteJog){
-    velocxBolinha *= -1
+function verificaColisaoRaqueteLib(x,y){
+  colidiu =  
+  collideRectCircle(x, y, raqueteComprimento, raqueteAltura, xBolinha, yBolinha, raio);
+  if (colidiu){
+    velocxBolinha *= -1;
   }
 }
-
-function verificaColisaoRaquetePc () {
-  if (xBolinha - raio > xRaquetePc + raqueteComprimentoPc && yBolinha - raio > yRaquetePc + raqueteAlturaPc && yBolinha + raio > yRaqueteJog){
-    velocxBolinha *= -1
-  }
+function movimentaRaquetePC (){
+  velocYpc = yBolinha - yRaquetePc - raqueteComprimento / 2 - 20
+  yRaquetePc += velocYpc
 }
