@@ -5,8 +5,8 @@ let diametroBolinha = 30;
 let raio = diametroBolinha / 2;
 
 //variaveis velocidade da bolinha
-let velocxBolinha = 3
-let velocyBolinha = 3
+let velocxBolinha = 6
+let velocyBolinha = 6
 
 //variaveis da raquete jogador
 let xRaqueteJog = 10
@@ -20,9 +20,27 @@ let yRaquetePc = 130
 let velocYpc;
 
 let colidiu = false;
+let chanceDeErrar = 0
+
+//placar do jogo
+
+let meusPontos = 0
+let pontosPc = 0
+
+//sons do jogo
+let raquetada;
+let ponto;
+let trilha;
+
+function preload(){
+  trilha = loadSound("trilha.mp3");
+  ponto = loadSound ("ponto.mp3");
+  raquetada = loadSound ("raquetada.mp3");
+}
 
 function setup() {
   createCanvas(500, 350);
+  trilha.loop();
 }
 
 function draw() {
@@ -34,8 +52,10 @@ function draw() {
     mostraRaquete(xRaquetePc, yRaquetePc);
     movimentaRaqueteJog();
     movimentaRaquetePC();
+    incluirPlacar();
     verificaColisaoRaqueteLib(xRaqueteJog,yRaqueteJog);
     verificaColisaoRaqueteLib(xRaquetePc,yRaquetePc);
+    marcaPonto();
 }
 
 function mostraRaquete (x,y){
@@ -81,9 +101,50 @@ function verificaColisaoRaqueteLib(x,y){
   collideRectCircle(x, y, raqueteComprimento, raqueteAltura, xBolinha, yBolinha, raio);
   if (colidiu){
     velocxBolinha *= -1;
+    raquetada.play();
   }
 }
 function movimentaRaquetePC (){
-  velocYpc = yBolinha - yRaquetePc - raqueteComprimento / 2 - 20
-  yRaquetePc += velocYpc
+  velocYpc = yBolinha - yRaquetePc - raqueteComprimento / 2 - 20;
+  yRaquetePc += velocYpc + chanceDeErrar
+  calculaChanceDeErrar()
+}
+function calculaChanceDeErrar(){
+  if (pontosPc >= meusPontos){
+    chanceDeErrar += 1
+    if (chanceDeErrar >= 39){
+    chanceDeErrar = 40
+    }
+    else {
+    chanceDeErrar -= 1
+    if (chanceDeErrar <= 35){
+    chanceDeErrar = 35
+    }
+    }
+  }
+}
+
+function incluirPlacar(){
+  stroke(255);
+  textAlign (CENTER);
+  textSize(16);
+  fill(color(255,140,0));
+  rect(100, 10, 40, 20);
+  fill(255);
+  text(meusPontos, 120, 26);
+  fill(color(255,140,0));
+  rect(360, 10, 40, 20);
+  fill(255);
+  text(pontosPc, 380, 26);
+}
+
+function marcaPonto(){
+  if (xBolinha > 490){
+    meusPontos +=1;
+    ponto.play();
+  }
+  if (xBolinha < 10){
+    pontosPc += 1;
+    ponto.play();
+  }
 }
